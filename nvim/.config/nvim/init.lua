@@ -2,7 +2,6 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- Adicione isso ANTES de carregar plugins
 vim.g.python3_host_prog = vim.fn.exepath("python3") -- Ou caminho absoluto
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
@@ -34,7 +33,7 @@ vim.opt.undofile = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
--- Keep signcolumn on by default
+-- Keep sign column on by default
 vim.opt.signcolumn = "yes"
 
 -- Decrease update time
@@ -66,6 +65,9 @@ vim.keymap.set("n", "<Left>", "<Nop>")
 vim.keymap.set("n", "<Right>", "<Nop>")
 
 vim.api.nvim_set_keymap("n", "S", "<Plug>VSurround", { noremap = false, silent = true })
+
+vim.opt.wrap = true
+vim.opt.textwidth = 80
 
 -- Alternar entre números absolutos e relativos com F5
 vim.api.nvim_set_keymap("n", "<F5>", ":set invnumber invrelativenumber<CR>", { noremap = true, silent = true })
@@ -119,11 +121,12 @@ require("lazy").setup({
 	{
 		"uloco/bluloco.nvim",
 		lazy = false,
+		style = "dark",
+		guicursor = true,
 		priority = 1000,
 		dependencies = { "rktjmp/lush.nvim" },
 		config = function()
 			-- your optional config goes here, see below.
-
 			vim.opt.termguicolors = true
 			vim.cmd("colorscheme bluloco")
 		end,
@@ -135,10 +138,24 @@ require("lazy").setup({
 			vim.g.vimwiki_list = {
 				{
 					path = "~/vimwiki/", -- Pasta padrão para as notas
-					syntax = "markdown", -- Usar Markdown (opcional: 'default' para sintaxe Vimwiki)
-					ext = ".md", -- Extensão dos arquivos
+					syntax = "default", -- Usar Markdown (opcional: 'default' para sintaxe Vimwiki)
+					ext = ".wiki", -- Extensão dos arquivos
 				},
 			}
+
+			vim.api.nvim_create_augroup("VimwikiHighlight", { clear = true })
+			vim.api.nvim_create_autocmd("FileType", {
+				group = "VimwikiHighlight",
+				pattern = "vimwiki",
+				callback = function()
+					vim.cmd("highlight VimwikiHeader1 guifg=#61afef ctermfg=75") -- Azul Royal
+					vim.cmd("highlight VimwikiHeader2 guifg=#56b6c2 ctermfg=73") -- Verde água
+					vim.cmd("highlight VimwikiHeader3 guifg=#e5c07b ctermfg=180") -- Dourado claro
+					vim.cmd("highlight VimwikiHeader4 guifg=#e06c75 ctermfg=168") -- Vermelho cereja
+					vim.cmd("highlight VimwikiHeader5 guifg=#c678dd ctermfg=176") -- Lavanda
+					vim.cmd("highlight VimwikiHeader6 guifg=#98c379 ctermfg=114") -- Verde lima
+				end,
+			})
 		end,
 	},
 
