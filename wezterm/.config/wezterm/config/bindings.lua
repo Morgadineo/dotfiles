@@ -44,6 +44,26 @@ return {
       { key = 'l', mods = mod.SUPER_REV, action = act.ActivatePaneDirection('Right') },
 
       {
+         key = [[;]],
+         mods = mod.SUPER,
+         action = wezterm.action_callback(function(window, pane)
+            -- Configuração para remover completamente o plano de fundo
+            window:set_config_overrides({
+               background = {
+                  {
+                     source = { Color = colors.background }, -- Usa a cor padrão
+                     width = '100%',
+                     height = '100%',
+                     opacity = 1.0,
+                  },
+               },
+            })
+            -- Força o redesenho imediato
+            window:perform_action(wezterm.action.ReloadConfiguration, pane)
+         end),
+      },
+
+      {
          key = [[/]],
          mods = mod.SUPER,
          action = wezterm.action_callback(function(window, _pane)
